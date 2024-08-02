@@ -15,9 +15,8 @@ type Event struct {
 	UserId   int
 }
 
-func (e Event) Save() error {
-	query := `INSERT INTO events(name, desc, location, datetime, user_id) 
-	values (?,?,?,?,?)`
+func (event Event) Save() error {
+	query := `INSERT INTO events(name, desc, location, datetime, user_id) values (?,?,?,?,?)`
 
 	stmt, err := db.DB.Prepare(query)
 	if err != nil {
@@ -26,14 +25,14 @@ func (e Event) Save() error {
 
 	defer stmt.Close()
 
-	result, err := stmt.Exec(e.Name, e.Desc, e.Location, e.DateTime, e.UserId)
+	result, err := stmt.Exec(event.Name, event.Desc, event.Location, event.DateTime, event.UserId)
 	if err != nil {
 		return err
 	}
 
 	id, err := result.LastInsertId()
 
-	e.Id = id
+	event.Id = id
 	return err
 }
 
