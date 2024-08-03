@@ -16,3 +16,6 @@ L170:
 
 L172:
     Query() gives rows, QueryRow gives one single row.
+
+go.mod vs go.sum:
+    https://golangbyexample.com/go-mod-sum-module/

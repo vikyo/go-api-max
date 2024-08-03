@@ -53,12 +53,12 @@ func (user User) Save() error {
 	return err
 }
 
-func (user User) ValidateCredentials() error {
-	query := `SELECT password FROM users WHERE email = ?`
+func (user *User) ValidateCredentials() error {
+	query := `SELECT id, password FROM users WHERE email = ?`
 
 	row := db.DB.QueryRow(query, user.Email)
 	var retievedPassword string
-	err := row.Scan(&retievedPassword)
+	err := row.Scan(&user.Id, &retievedPassword)
 
 	if err != nil {
 		fmt.Print("password scan failed")

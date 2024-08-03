@@ -12,10 +12,10 @@ type Event struct {
 	Desc     string    `binding: "required"`
 	Location string    `binding: "required"`
 	DateTime time.Time `binding: "required"`
-	UserId   int
+	UserId   int64
 }
 
-func (event Event) Save() error {
+func (event *Event) Save() error {
 	query := `INSERT INTO events(name, desc, location, datetime, user_id) values (?,?,?,?,?)`
 
 	stmt, err := db.DB.Prepare(query)
