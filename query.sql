@@ -8,3 +8,6 @@ SELECT Id, name, `desc`, location, dateTime, user_id
 FROM events;
 
 DELETE from events;
+
+SELECT id, user_id, event_id
+FROM registrations;

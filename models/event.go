@@ -1,6 +1,7 @@
 package models
 
 import (
+	"errors"
 	"time"
 
 	"example.com/go-api/db"
@@ -100,5 +101,55 @@ func (e Event) Delete() error {
 	defer stmt.Close()
 
 	_, err = stmt.Exec(e.Id)
+	return err
+}
+
+func (event *Event) Register(userId int64) error {
+	query := `INSERT INTO registrations(event_id, user_id) values (?,?)`
+
+	stmt, err := db.DB.Prepare(query)
+
+	if err != nil {
+		return err
+	}
+
+	defer stmt.Close()
+
+	_, err = stmt.Exec(event.Id, userId)
+
+	if err != nil {
+		return err
+	}
+
+	return err
+}
+
+func (event *Event) CancelRegistration(userId int64) error {
+	query := `DELETE FROM registrations WHERE event_id = ? AND user_id = ?`
+
+	stmt, err := db.DB.Prepare(query)
+
+	if err != nil {
+		return err
+	}
+
+	defer stmt.Close()
+
+	result, err := stmt.Exec(event.Id, userId)
+
+	if err != nil {
+		return err
+	}
+
+	rowsAffected, err := result.RowsAffected()
+
+	if err != nil {
+		return err
+	}
+
+	if rowsAffected == 0 {
+		return errors.New("no entry found")
+	}
+
 	return err
 }
